@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import model.Document;
-import model.Index;
 import parser.Indexer;
 import parser.Parser;
 
@@ -21,8 +20,7 @@ public class Engine {
 		List<Document> documents = parser.parse(new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream(INPUT_FILE))));
 		Indexer indexer = new Indexer();
 		indexer.index(documents);
-		Index index = new Index();
-		System.out.println(index.toString());
+		System.out.println(indexer.getIndex().toString());
 	}
 
 }
