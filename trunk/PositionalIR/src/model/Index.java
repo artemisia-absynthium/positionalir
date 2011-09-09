@@ -21,28 +21,17 @@ public class Index {
 
 	public void addWord(String word, String docid, int position) {
 		//Se la parola è già contenuta nell'indice
-		if (this.reverseIndex.containsKey(word)) {
-			//Se è già stata trovata almeno una volta nel documento corrente
-			if (this.reverseIndex.get(word).containsKey(docid)) {
-				List<Integer> positions = new ArrayList<Integer>(1);
-				positions = this.reverseIndex.get(word).get(docid);
-				positions.add(position);
-			}
-			else {
-				List<Integer> positions = new ArrayList<Integer>(1);
-				positions.add(position);
-				Map<String, List<Integer>> occurrences = new LinkedHashMap<String, List<Integer>>();
-				occurrences.put(docid, positions);
-				this.reverseIndex.get(word).put(docid, positions);
-			}
-		}
-		else {
-			List<Integer> positions = new ArrayList<Integer>(1);
-			positions.add(position);
-			Map<String, List<Integer>> occurrences = new LinkedHashMap<String, List<Integer>>();
-			occurrences.put(docid, positions);
+		Map<String, List<Integer>> occurrences = this.reverseIndex.get(word);
+		if(occurrences == null) {
+			occurrences = new LinkedHashMap<String, List<Integer>>();
 			this.reverseIndex.put(word, occurrences);
 		}
+		List<Integer> positions = occurrences.get(docid);
+		if(positions == null) {
+			positions = new ArrayList<Integer>(1);
+			occurrences.put(docid, positions);
+		}
+		positions.add(position);
 	}
 
 	@Override
