@@ -3,19 +3,15 @@ package model;
 public class Document {
 	
 	private String newid;
-	private String date;
-	private String[] places;
 	private String title;
 	private String body;
 	private String all;
 
 	public Document() {}
 	
-	public Document(String newid, String date, String[] places, String title,
+	public Document(String newid, String title,
 			String body) {
 		this.newid = newid;
-		this.date = date;
-		this.places = places;
 		this.title = title;
 		this.body = body;
 	}
@@ -26,22 +22,6 @@ public class Document {
 
 	public void setNewid(String newid) {
 		this.newid = newid;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public String[] getPlaces() {
-		return places;
-	}
-
-	public void setPlaces(String[] places) {
-		this.places = places;
 	}
 
 	public String getTitle() {
@@ -70,11 +50,7 @@ public class Document {
 	}
 	
 	private void merge() {
-		this.all = this.date;
-		for (String place : places) {
-			this.all = this.all + " " + place;
-		}
-		this.all = this.all + " " + this.title + " " + this.body;
+		this.all = this.title + " " + this.body;
 	}
 
 }

@@ -3,7 +3,6 @@ package parser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,8 +18,6 @@ public class Parser {
 	
 	private final Pattern htmlPattern = Pattern.compile("&#(\\d+);");
 	private final Pattern newidPattern = Pattern.compile("NEWID=\"(\\d+)\"");
-	private final Pattern datePattern = Pattern.compile("<DATE>(.*)</DATE>");
-	private final Pattern placesPattern = Pattern.compile("<PLACES>(.*)</PLACES>");
 	private final Pattern titlePattern = Pattern.compile("<TITLE>(.*)</TITLE>");
 	private final Pattern bodyPattern = Pattern.compile("<BODY>(.*)</BODY>");
 	private final Pattern bodyPattern2 = Pattern.compile("<TEXT.*>(.*)\t(.*)\t(.*)</TEXT>");
@@ -80,26 +77,19 @@ public class Parser {
 	}
 
 	private Document tokenize(String line) {
-		String newid, date, title, body;
-		String[] places = new String[0];
+		String newid, title, body;
 		newid = extractMatcherPatternGroup(line, newidPattern, 1);
-		date = extractMatcherPatternGroup(line, datePattern, 1);
-		places = extractMatcherPatternGroup(line, placesPattern, 1).replaceAll("<D>", "").split("</D>");
 		title = extractMatcherPatternGroup(line, titlePattern, 1);
 		body = extractMatcherPatternGroup(line, bodyPattern, 1);
 		if (body.isEmpty()) {
 			title = extractMatcherPatternGroup(line, bodyPattern2, 1);
 			body = extractMatcherPatternGroup(line, bodyPattern2, 3);
 		}
-		//TODO: rimuovere syso
-		System.out.println(line);
-		System.out.println("ID --> " + newid + " DATE --> " + date + " PLACES --> " + Arrays.toString(places) + " TITLE --> " + title + " BODY --> " + body);
-		return this.createDocument(newid, date, places, title, body);
+		return this.createDocument(newid, title, body);
 	}
 
-	private Document createDocument(String newid, String date, String[] places,
-			String title, String body) {
-		return new Document(newid, date, places, title, body);
+	private Document createDocument(String newid, String title, String body) {
+		return new Document(newid, title, body);
 	}
 
 	private String extractMatcherPatternGroup(final String line, final Pattern newidPattern, final int i) {
