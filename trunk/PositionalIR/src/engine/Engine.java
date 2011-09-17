@@ -3,11 +3,13 @@ package engine;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 
 import model.Document;
 import parser.Indexer;
 import parser.Parser;
+import search.SearchEngine;
 
 public class Engine {
 	
@@ -20,7 +22,10 @@ public class Engine {
 		List<Document> documents = parser.parse(new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream(INPUT_FILE))));
 		Indexer indexer = new Indexer();
 		indexer.index(documents);
-		System.out.println(indexer.getIndex().toString());
+//		System.out.println(indexer.getIndex().toString());
+		SearchEngine engine = new SearchEngine(indexer.getIndex());
+		final String[] result = engine.search("in", "the");
+		System.out.println(Arrays.toString(result));
 	}
 
 }
