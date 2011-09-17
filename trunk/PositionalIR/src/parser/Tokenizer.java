@@ -11,10 +11,15 @@ public class Tokenizer {
 
 	public Tokenizer() {}
 	
-	public String[] tokenize(Document document) {
+	public String[] tokenizeDocument(Document document) {
 		String all = document.getAll();
 		all = this.removePunctuation(all);
 		return all.split(" ");
+	}
+	
+	public String[] tokenizeQuery(String query) {
+		query = this.removePunctuation(query);
+		return query.split(" ");
 	}
 
 	private String removePunctuation(String all) {

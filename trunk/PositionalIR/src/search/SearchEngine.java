@@ -15,7 +15,7 @@ public class SearchEngine {
 		this.index = index;
 	}
 	
-	public String[] search(String... queryTokens) {
+	public String[] search(String... queryTokens) { //TODO: raffinare
 		Set<String> candidatedDocuments = new LinkedHashSet<String>(index.getDocumentsIDs(queryTokens[0]));
 		for (String token : queryTokens) {
 			Set<String> documentsIDs = index.getDocumentsIDs(token);
@@ -34,25 +34,23 @@ public class SearchEngine {
 	}
 
 	private boolean inARow(String docID, String[] queryTokens) {
-		List<Integer> positions1 = index.getWordPositions(queryTokens[0], docID);
-		for (int i = 1; i < queryTokens.length; i++) {
-			List<Integer> positions2 = index.getWordPositions(queryTokens[i], docID);
-			if(!containsNumbersInARow(positions1, positions2))
-				return false;
-			positions1 = positions2;
-		}
-		return true;
-	}
-
-	private boolean containsNumbersInARow(List<Integer> positions1, List<Integer> positions2) {
-		Iterator<Integer> it1 = positions1.iterator();
-		while (it1.hasNext()) {
-			int pos1 = it1.next();
-			if (positions2.contains(pos1 + 1)) {
+		final List<Integer> wordPositions = index.getWordPositions(queryTokens[0], docID);
+		for (int position : wordPositions) {
+			if (this.isInARow(position + 1, docID, 1, queryTokens)) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private boolean isInARow(int position, String docID, int queryTokenIndex, String[] queryTokens) {
+		if (queryTokenIndex >= queryTokens.length) {
+			return true;
+		}	
+		final List<Integer> wordPositions = index.getWordPositions(queryTokens[queryTokenIndex], 
+				docID);
+		return wordPositions.contains(position) && 
+				isInARow(position + 1, docID, queryTokenIndex + 1, queryTokens);
 	}
 
 }
