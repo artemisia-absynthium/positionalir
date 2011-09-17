@@ -9,10 +9,11 @@ public class Indexer {
 	
 	private final Index index;
 	
-	private final Tokenizer tokenizer = new Tokenizer();
+	private final Tokenizer tokenizer;
 	
 	public Indexer() {
 		this.index = new Index();
+		this.tokenizer = new Tokenizer();
 	}
 
 	public Index getIndex() {
@@ -26,7 +27,7 @@ public class Indexer {
 	}
 
 	private void createInverseIndex(Document document) {
-		String[] bagOfWords = tokenizer.tokenize(document);
+		String[] bagOfWords = tokenizer.tokenizeDocument(document);
 		int i = 1;
 		for (String word : bagOfWords) {
 			if (word.matches("\\w+")) {
