@@ -9,6 +9,8 @@ public class Indexer {
 	
 	private final Index index;
 	
+	private final Tokenizer tokenizer = new Tokenizer();
+	
 	public Indexer() {
 		this.index = new Index();
 	}
@@ -24,7 +26,6 @@ public class Indexer {
 	}
 
 	private void createInverseIndex(Document document) {
-		Tokenizer tokenizer = new Tokenizer();
 		String[] bagOfWords = tokenizer.tokenize(document);
 		int i = 1;
 		for (String word : bagOfWords) {

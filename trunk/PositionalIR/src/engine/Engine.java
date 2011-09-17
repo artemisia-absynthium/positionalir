@@ -18,6 +18,7 @@ public class Engine {
 	public Engine() {}
 	
 	public static void main(String[] args) throws IOException {
+		final long start = System.currentTimeMillis();
 		Parser parser = new Parser();
 		List<Document> documents = parser.parse(new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream(INPUT_FILE))));
 		Indexer indexer = new Indexer();
@@ -25,7 +26,9 @@ public class Engine {
 //		System.out.println(indexer.getIndex().toString());
 		SearchEngine engine = new SearchEngine(indexer.getIndex());
 		final String[] result = engine.search("in", "the");
+		final long end = System.currentTimeMillis();
 		System.out.println(Arrays.toString(result));
+		System.out.println(end - start + "millisecondi");
 	}
 
 }
