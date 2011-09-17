@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 import model.Document;
 
 public class Tokenizer {
+	
+	private final Pattern punctuation = Pattern.compile("\\p{Punct}");
 
 	public Tokenizer() {}
 	
@@ -17,7 +19,6 @@ public class Tokenizer {
 
 	private String removePunctuation(String all) {
 		StringBuffer buffer = new StringBuffer();
-		Pattern punctuation = Pattern.compile("\\p{Punct}");
 		String replace = " ";
 		Matcher matcher = punctuation.matcher(all);
 		while(matcher.find()) {
