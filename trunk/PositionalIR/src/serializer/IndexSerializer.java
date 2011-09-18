@@ -1,5 +1,7 @@
 package serializer;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,6 +13,7 @@ import java.io.OutputStream;
 import java.util.logging.Logger;
 
 import model.Index;
+import util.IOUtil;
 import util.LogUtil;
 
 public class IndexSerializer {
@@ -25,30 +28,15 @@ public class IndexSerializer {
 
 	public void saveIndex(Index index) {
 		log.info(LogUtil.logTaskStart("Save Index"));
+		ObjectOutputStream objectOutputStream = null;
 		try {
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(getWritingStream());
+			objectOutputStream = new ObjectOutputStream(getWritingStream());
 			objectOutputStream.writeObject(index);
-			objectOutputStream.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
+			IOUtil.close(objectOutputStream);
 			log.info(LogUtil.logTaskEnd("Save Index"));
-		}
-	}
-
-	protected OutputStream getWritingStream() {
-		try {
-			return new FileOutputStream(filePath);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	protected InputStream getReadingStream() {
-		try {
-			return new FileInputStream(filePath);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
 		}
 	}
 	
@@ -65,12 +53,23 @@ public class IndexSerializer {
 			throw new RuntimeException(e);
 		} finally {
 			log.info(LogUtil.logTaskEnd("Load Index"));
-			try {
-				if(objectInputStream != null)
-					objectInputStream.close();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			IOUtil.close(objectInputStream);
+		}
+	}
+
+	protected OutputStream getWritingStream() {
+		try {
+			return new BufferedOutputStream(new FileOutputStream(filePath));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	protected InputStream getReadingStream() {
+		try {
+			return new BufferedInputStream(new FileInputStream(filePath));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
 		}
 	}
 	

@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class Index implements Serializable {
 	private final Map<String, Map<String, List<Integer>>> reverseIndex;
 
 	public Index() {
-		this.reverseIndex = new TreeMap<String, Map<String, List<Integer>>>();
+		this.reverseIndex = new HashMap<String, Map<String, List<Integer>>>();
 	}
 	
 	public Map<String, Map<String, List<Integer>>> getReverseIndex() {
@@ -43,7 +44,6 @@ public class Index implements Serializable {
 	}
 
 	public void addWord(String word, String docid, int position) {
-		//Se la parola è già contenuta nell'indice
 		Map<String, List<Integer>> occurrences = this.reverseIndex.get(word);
 		if(occurrences == null) {
 			occurrences = new LinkedHashMap<String, List<Integer>>();
@@ -56,10 +56,10 @@ public class Index implements Serializable {
 		}
 		positions.add(position);
 	}
-
+	
 	@Override
 	public String toString() {
-		return this.reverseIndex.toString().replaceAll("},", "},\n\t");
+		return new TreeMap<String, Map<String, List<Integer>>>(this.reverseIndex).toString().replaceAll("},", "},\n\t");
 	}
 
 }
