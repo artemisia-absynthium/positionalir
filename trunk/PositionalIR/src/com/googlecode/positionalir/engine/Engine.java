@@ -6,7 +6,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.googlecode.positionalir.model.Index;
-import com.googlecode.positionalir.parser.Indexer;
 import com.googlecode.positionalir.search.SearchEngine;
 import com.googlecode.positionalir.serializer.IndexSerializer;
 import com.googlecode.positionalir.util.LogUtil;

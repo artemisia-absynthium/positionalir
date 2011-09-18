@@ -2,7 +2,7 @@ package com.googlecode.positionalir.search;
 
 import java.util.logging.Logger;
 
-import com.googlecode.positionalir.parser.Tokenizer;
+import com.googlecode.positionalir.engine.Tokenizer;
 import com.googlecode.positionalir.util.LogUtil;
 
 

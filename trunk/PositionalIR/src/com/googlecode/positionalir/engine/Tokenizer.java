@@ -1,4 +1,4 @@
-package com.googlecode.positionalir.parser;
+package com.googlecode.positionalir.engine;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
