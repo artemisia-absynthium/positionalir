@@ -16,21 +16,21 @@ public class SearchEngine {
 	}
 	
 	public String[] search(String... queryTokens) { //TODO: raffinare
-		Set<String> candidatedDocuments = new LinkedHashSet<String>(index.getDocumentsIDs(queryTokens[0]));
+		Set<String> candidateDocuments = new LinkedHashSet<String>(index.getDocumentsIDs(queryTokens[0]));
 		for (String token : queryTokens) {
 			Set<String> documentsIDs = index.getDocumentsIDs(token);
 			// ottengo la lista dei documenti dove occorrono tutte le parole
-			candidatedDocuments.retainAll(documentsIDs);
+			candidateDocuments.retainAll(documentsIDs);
 		}
 		// ottengo le posizioni delle parole nei documenti
-		final Iterator<String> iterator = candidatedDocuments.iterator();
+		final Iterator<String> iterator = candidateDocuments.iterator();
 		while (iterator.hasNext()) {
 			String docID = iterator.next();
 			if(!inARow(docID, queryTokens)) {
 				iterator.remove();
 			}
 		}
-		return candidatedDocuments.toArray(new String[0]);
+		return candidateDocuments.toArray(new String[0]);
 	}
 
 	private boolean inARow(String docID, String[] queryTokens) {

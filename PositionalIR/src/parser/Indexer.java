@@ -12,7 +12,11 @@ public class Indexer {
 	private final Tokenizer tokenizer;
 	
 	public Indexer() {
-		this.index = new Index();
+		this(new Index());
+	}
+	
+	public Indexer(Index index) {
+		this.index = index;
 		this.tokenizer = new Tokenizer();
 	}
 
