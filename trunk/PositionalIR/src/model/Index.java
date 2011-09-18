@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -8,7 +9,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class Index {
+public class Index implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9006197481888423582L;
 	
 	/**
 	 * Parola -> ID doc -> Posizioni.

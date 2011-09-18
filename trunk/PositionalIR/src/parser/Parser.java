@@ -8,20 +8,26 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import util.LogUtil;
 
 import model.Document;
 
 
 public class Parser {
 	
+	private final Logger log = LogUtil.getLogger(Parser.class);
+	
 	private final Pattern htmlPattern = Pattern.compile("&#(\\d+);");
 	private final Pattern newidPattern = Pattern.compile("NEWID=\"(\\d+)\"");
 	private final Pattern titlePattern = Pattern.compile("<TITLE>(.*)</TITLE>");
 	private final Pattern bodyPattern = Pattern.compile("<BODY>(.*)</BODY>");
 	private final Pattern bodyPattern2 = Pattern.compile("<TEXT.*>(.*)\t(.*)\t(.*)</TEXT>");
-	private Map<String, String> entities;
+	
+	private final Map<String, String> entities;
 	
 	public Parser() {
 		this.entities = new HashMap<String, String>();
@@ -65,7 +71,13 @@ public class Parser {
 	}
 
 	public List<Document> parse(BufferedReader reader) throws IOException {
+		log.info(LogUtil.logTaskStart("Parsing SGML"));
+		
+		log.info(LogUtil.logTaskStart("Reading File"));
 		String input = this.parseSGML(reader);
+		log.info(LogUtil.logTaskEnd("Reading File"));
+		
+		log.info(LogUtil.logTaskStart("Tokenizing"));
 		BufferedReader reader2 = new BufferedReader(new StringReader(input));
 		String line;
 		List<Document> documents = new LinkedList<Document>();
@@ -73,6 +85,9 @@ public class Parser {
 			Document document = this.tokenize(line);
 			documents.add(document);
 		}
+		log.info(LogUtil.logTaskEnd("Tokenizing"));
+		
+		log.info(LogUtil.logTaskEnd("Parsing SGML"));
 		return documents;
 	}
 
