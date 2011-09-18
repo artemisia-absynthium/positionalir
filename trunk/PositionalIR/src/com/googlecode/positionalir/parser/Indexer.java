@@ -1,4 +1,4 @@
-package parser;
+package com.googlecode.positionalir.parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import model.Document;
-import model.Index;
-import util.IOUtil;
-import util.LogUtil;
+import com.googlecode.positionalir.model.Document;
+import com.googlecode.positionalir.model.Index;
+import com.googlecode.positionalir.util.IOUtil;
+import com.googlecode.positionalir.util.LogUtil;
+
 
 public class Indexer {
 	

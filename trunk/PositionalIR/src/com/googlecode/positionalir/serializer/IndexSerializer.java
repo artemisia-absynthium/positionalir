@@ -1,4 +1,4 @@
-package serializer;
+package com.googlecode.positionalir.serializer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -12,9 +12,10 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.logging.Logger;
 
-import model.Index;
-import util.IOUtil;
-import util.LogUtil;
+import com.googlecode.positionalir.model.Index;
+import com.googlecode.positionalir.util.IOUtil;
+import com.googlecode.positionalir.util.LogUtil;
+
 
 public class IndexSerializer {
 	

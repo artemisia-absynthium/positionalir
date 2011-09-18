@@ -1,9 +1,10 @@
-package search;
+package com.googlecode.positionalir.search;
 
 import java.util.logging.Logger;
 
-import parser.Tokenizer;
-import util.LogUtil;
+import com.googlecode.positionalir.parser.Tokenizer;
+import com.googlecode.positionalir.util.LogUtil;
+
 
 public class QueryProcessor {
 	
