@@ -26,7 +26,7 @@ public class Engine {
 		
 		//l'indice completo in memoria occupa oltre 256 MB ma meno di 512 MB
 		//Per il parsing di tutti aggiungere come opzione java -Xmx512m
-		boolean rebuildIndex = false;
+		boolean rebuildIndex = true;
 		
 		final Engine engine = new Engine();
 		
