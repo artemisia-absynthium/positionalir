@@ -1,4 +1,4 @@
-package engine;
+package com.googlecode.positionalir.engine;
 
 import java.io.IOException;
 import java.util.Arrays;
