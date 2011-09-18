@@ -47,6 +47,7 @@ public class Engine {
 		
 		String[] trySearch = searchEngine.searchQuery("on the news");
 		
+		System.err.flush();
 		System.out.println(Arrays.toString(trySearch));
 	}
 
