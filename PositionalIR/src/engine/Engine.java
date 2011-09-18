@@ -1,66 +1,75 @@
 package engine;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import model.Document;
 import model.Index;
 import parser.Indexer;
-import parser.Parser;
-import search.QueryProcessor;
 import search.SearchEngine;
 import serializer.IndexSerializer;
 import util.LogUtil;
 
 public class Engine {
 	
-	private static final Logger log = LogUtil.getLogger(Engine.class);
+	private final Logger log = LogUtil.getLogger(Engine.class);
 	
-	private static final String INPUT_FILE = "/reut2-000.sgm";
+	private final IndexSerializer indexSerializer;
 	
-	public Engine() {}
+	public Engine() {
+		this.indexSerializer = new IndexSerializer("reuters.index");
+	}
 	
 	public static void main(String[] args) throws IOException {
 		LogManager.getLogManager().readConfiguration(Engine.class.getResourceAsStream("/logging.properties"));
-		final IndexSerializer indexSerializer = new IndexSerializer("reuters.index");
 		
-		Index index;
+		//l'indice completo in memoria occupa oltre 256 MB ma meno di 512 MB
+		//Per il parsing di tutti aggiungere come opzione java -Xmx512m
+		boolean rebuildIndex = false;
 		
-		log.info(LogUtil.logTaskStart("Build Index"));
-		index = buildIndexFromFile();
-		log.info(LogUtil.logTaskEnd("Build Index"));
+		final Engine engine = new Engine();
 		
-		indexSerializer.saveIndex(index);
+		final Index index;
 		
-		index = indexSerializer.loadIndex();
+		if(rebuildIndex) {
+			index = engine.buildReutersIndex();
+			engine.saveIndex(index);
+		} else {
+			index = engine.loadIndex();
+		}
 		
 //		System.out.println(index.getWordPositions("on", "397").toString());
 //		System.out.println(index.getWordPositions("the", "397").toString());
 //		System.out.println(index.getWordPositions("news", "397").toString());
 		
-		String[] trySearch = trySearch(index, "on the news");
+		SearchEngine searchEngine = new SearchEngine(index);
+		
+		String[] trySearch = searchEngine.searchQuery("on the news");
+		
 		System.out.println(Arrays.toString(trySearch));
 	}
 
-	private static String[] trySearch(Index index, String query) {
-		log.info(LogUtil.logTaskStart("Search"));
-		SearchEngine engine = new SearchEngine(index);
-		QueryProcessor processor = new QueryProcessor();
-		final String[] result = engine.search(processor.process(query));
-		log.info(LogUtil.logTaskEnd("Search"));
-		return result;
+	public Index loadIndex() {
+		return indexSerializer.loadIndex();
+	}
+	
+	public void saveIndex(Index index) {
+		indexSerializer.saveIndex(index);
 	}
 
-	private static Index buildIndexFromFile() throws IOException {
-		Parser parser = new Parser();//TODO: introdurre il parser nell'indexer
-		List<Document> documents = parser.parse(new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream(INPUT_FILE))));
+	public Index buildReutersIndex() {
+		log.info(LogUtil.logTaskStart("Build Index"));
 		Indexer indexer = new Indexer();
-		indexer.index(documents);
+		indexer.index("/reut2-000.sgm"
+				, "/reut2-001.sgm", "/reut2-002.sgm", "/reut2-003.sgm", "/reut2-004.sgm"
+				, "/reut2-005.sgm", "/reut2-006.sgm", "/reut2-007.sgm", "/reut2-008.sgm"
+				, "/reut2-009.sgm", "/reut2-010.sgm", "/reut2-011.sgm", "/reut2-012.sgm"
+				, "/reut2-013.sgm", "/reut2-014.sgm", "/reut2-015.sgm", "/reut2-016.sgm"
+				, "/reut2-017.sgm", "/reut2-018.sgm", "/reut2-019.sgm", "/reut2-020.sgm"
+				, "/reut2-021.sgm"
+				);
+		log.info(LogUtil.logTaskEnd("Build Index"));
 		return indexer.getIndex();
 	}
 

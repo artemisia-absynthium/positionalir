@@ -9,8 +9,6 @@ public class Tokenizer {
 	
 	private final Pattern punctuation = Pattern.compile("\\p{Punct}");
 
-	public Tokenizer() {}
-	
 	public String[] tokenizeDocument(Document document) {
 		String all = document.getAll();
 		all = this.removePunctuation(all);
@@ -22,12 +20,11 @@ public class Tokenizer {
 		return query.split(" ");
 	}
 
-	private String removePunctuation(String all) {
+	public String removePunctuation(String text) {
 		StringBuffer buffer = new StringBuffer();
-		String replace = " ";
-		Matcher matcher = punctuation.matcher(all);
+		Matcher matcher = punctuation.matcher(text);
 		while(matcher.find()) {
-			matcher.appendReplacement(buffer, replace);
+			matcher.appendReplacement(buffer, " ");
 		}
 		matcher.appendTail(buffer);
 		return buffer.toString().replaceAll("  +|\t+", " ");

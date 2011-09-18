@@ -4,33 +4,62 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
+
+import util.LogUtil;
 
 import model.Index;
 
 public class SearchEngine {
 	
+	private final Logger log = LogUtil.getLogger(SearchEngine.class);
+	
 	private final Index index;
+	
+	private final QueryProcessor queryProcessor;
 
 	public SearchEngine(Index index) {
-		this.index = index;
+		this(index, new QueryProcessor());
 	}
 	
-	public String[] search(String... queryTokens) { //TODO: raffinare
-		Set<String> candidateDocuments = new LinkedHashSet<String>(index.getDocumentsIDs(queryTokens[0]));
+	public SearchEngine(Index index, QueryProcessor queryProcessor) {
+		this.index = index;
+		this.queryProcessor = queryProcessor;
+	}
+	
+	public String[] searchQuery(String query) {
+		log.info(LogUtil.logTaskStart("Search Query"));
+		final String[] queryTokens = this.queryProcessor.process(query);
+		final String[] result = this.search(queryTokens);
+		log.info(LogUtil.logTaskEnd("Search Query"));
+		return result;
+	}
+	
+	public String[] search(String... queryTokens) { //TODO: raffinare nomi variabili
+		log.info(LogUtil.logTaskStart("Search DocID"));
+		
+		log.info(LogUtil.logTaskStart("Filtering Doc with all token"));
+		final Set<String> candidateDocuments = new LinkedHashSet<String>(index.getDocumentsIDs(queryTokens[0]));
 		for (String token : queryTokens) {
-			Set<String> documentsIDs = index.getDocumentsIDs(token);
-			// ottengo la lista dei documenti dove occorrono tutte le parole
-			candidateDocuments.retainAll(documentsIDs);
+			candidateDocuments.retainAll(index.getDocumentsIDs(token));
 		}
-		// ottengo le posizioni delle parole nei documenti
+		log.info(LogUtil.logTaskEnd("Filtering Doc with all token"));
+		log.info(LogUtil.log("Found " + candidateDocuments.size() + " docs with all token " + candidateDocuments + "."));
+		log.info(LogUtil.logTaskStart("Filtering Doc with consecutive token"));
 		final Iterator<String> iterator = candidateDocuments.iterator();
 		while (iterator.hasNext()) {
-			String docID = iterator.next();
+			final String docID = iterator.next();
+			log.info(LogUtil.logTaskStart("Checking Doc(" + docID + ")"));
 			if(!inARow(docID, queryTokens)) {
 				iterator.remove();
 			}
+			log.info(LogUtil.logTaskEnd("Checking Doc(" + docID + ")"));
 		}
-		return candidateDocuments.toArray(new String[0]);
+		log.info(LogUtil.logTaskEnd("Filtering Doc with consecutive token"));
+		
+		final String[] result = candidateDocuments.toArray(new String[0]);
+		log.info(LogUtil.logTaskEnd("Search DocID"));
+		return result;
 	}
 
 	private boolean inARow(String docID, String[] queryTokens) {
@@ -46,9 +75,8 @@ public class SearchEngine {
 	private boolean isInARow(int position, String docID, int queryTokenIndex, String[] queryTokens) {
 		if (queryTokenIndex >= queryTokens.length) {
 			return true;
-		}	
-		final List<Integer> wordPositions = index.getWordPositions(queryTokens[queryTokenIndex], 
-				docID);
+		}
+		final List<Integer> wordPositions = index.getWordPositions(queryTokens[queryTokenIndex], docID);
 		return wordPositions.contains(position) && 
 				isInARow(position + 1, docID, queryTokenIndex + 1, queryTokens);
 	}
