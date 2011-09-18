@@ -1,4 +1,4 @@
-package parser;
+package com.googlecode.positionalir.parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,9 +12,10 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import util.LogUtil;
+import com.googlecode.positionalir.model.Document;
+import com.googlecode.positionalir.util.LogUtil;
 
-import model.Document;
+
 
 
 public class Parser {

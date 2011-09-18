@@ -1,4 +1,4 @@
-package model;
+package com.googlecode.positionalir.model;
 
 public class Document {
 	

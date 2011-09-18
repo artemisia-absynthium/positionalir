@@ -1,9 +1,10 @@
-package parser;
+package com.googlecode.positionalir.parser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import model.Document;
+import com.googlecode.positionalir.model.Document;
+
 
 public class Tokenizer {
 	

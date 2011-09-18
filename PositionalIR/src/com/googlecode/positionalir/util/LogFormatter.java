@@ -1,4 +1,4 @@
-package util;
+package com.googlecode.positionalir.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

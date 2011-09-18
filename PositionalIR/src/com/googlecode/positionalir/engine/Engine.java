@@ -5,11 +5,12 @@ import java.util.Arrays;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import model.Index;
-import parser.Indexer;
-import search.SearchEngine;
-import serializer.IndexSerializer;
-import util.LogUtil;
+import com.googlecode.positionalir.model.Index;
+import com.googlecode.positionalir.parser.Indexer;
+import com.googlecode.positionalir.search.SearchEngine;
+import com.googlecode.positionalir.serializer.IndexSerializer;
+import com.googlecode.positionalir.util.LogUtil;
+
 
 public class Engine {
 	

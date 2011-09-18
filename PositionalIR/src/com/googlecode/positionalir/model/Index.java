@@ -1,4 +1,4 @@
-package model;
+package com.googlecode.positionalir.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package search;
+package com.googlecode.positionalir.search;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import util.LogUtil;
+import com.googlecode.positionalir.model.Index;
+import com.googlecode.positionalir.util.LogUtil;
 
-import model.Index;
+
 
 public class SearchEngine {
 	
