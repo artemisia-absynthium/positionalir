@@ -1,5 +1,6 @@
 package com.googlecode.positionalir.model;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,9 +23,12 @@ public class Index implements Serializable {
 	 */
 	//            Parola      ID doc      Posizioni
 	private final Map<String, Map<String, List<Integer>>> reverseIndex;
+	
+	private final Map<Integer, String> docID2File;
 
 	public Index() {
 		this.reverseIndex = new HashMap<String, Map<String, List<Integer>>>();
+		this.docID2File = new HashMap<Integer, String>();
 	}
 	
 	public Map<String, Map<String, List<Integer>>> getReverseIndex() {
@@ -55,6 +59,17 @@ public class Index implements Serializable {
 			occurrences.put(docid, positions);
 		}
 		positions.add(position);
+	}
+	
+	public void addIndexedFileEntry(File file, List<Document> parseDoc) {
+		final String absolutePath = file.getAbsolutePath();
+		for (Document document : parseDoc) {
+			this.docID2File.put(Integer.parseInt(document.getNewid()), absolutePath);
+		}
+	}
+	
+	public String getFilePath(Integer docID) {
+		return this.docID2File.get(docID);
 	}
 	
 	@Override
