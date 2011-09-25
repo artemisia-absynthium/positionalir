@@ -1,6 +1,9 @@
 package com.googlecode.positionalir.engine;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -43,18 +46,28 @@ public class Indexer {
 	
 	public void index(String... files) {
 		log.info(LogUtil.logTaskStart("Indexing files"));
-		for (String file : files) {
-			log.info(LogUtil.logTaskStart("Processing File(" + file + ")"));
-			
-			final BufferedReader reader = new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream(file)));
+		for (String filePath : files) {
+			log.info(LogUtil.logTaskStart("Processing File(" + filePath + ")"));
+			final BufferedReader reader;
+			final File file = new File(filePath);
+			if(file.exists()) {
+				try {
+					reader = new BufferedReader(new FileReader(file));
+				} catch (FileNotFoundException e) {
+					throw new IllegalStateException("File deleted during indexing.", e);
+				}
+			} else {
+				reader = new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream(filePath)));
+			}
 			try {
 				List<Document> parseDoc = this.parser.parse(reader);
 				this.index(parseDoc);
+				this.index.addIndexedFileEntry(file, parseDoc);
 			} catch (IOException e) {
-				log.log(Level.SEVERE, LogUtil.log("Errore nel parsing del file: " + file + "."), e);
+				log.log(Level.SEVERE, LogUtil.log("Errore nel parsing del file: " + filePath + "."), e);
 				continue;
 			} finally {
-				log.info(LogUtil.logTaskEnd("Processing File(" + file + ")"));
+				log.info(LogUtil.logTaskEnd("Processing File(" + filePath + ")"));
 				IOUtil.close(reader);
 			}
 		}
