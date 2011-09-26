@@ -2,7 +2,6 @@ package com.googlecode.positionalir.engine;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -24,12 +23,6 @@ public class Engine {
 	
 	public static void main(String[] args) throws IOException {
 		LogManager.getLogManager().readConfiguration(Engine.class.getResourceAsStream("/logging.properties"));
-		
-		Random r = new Random();
-		boolean toBe = r.nextBoolean();
-		Number result = (toBe || !toBe) ? new Integer(3) : new Float(1);
-		System.out.println(result);
-		System.exit(0);
 		
 		//l'indice completo in memoria occupa oltre 256 MB ma meno di 512 MB
 		//Per il parsing di tutti aggiungere come opzione java -Xmx512m
