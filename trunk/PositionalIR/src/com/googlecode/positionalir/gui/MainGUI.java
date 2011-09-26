@@ -176,12 +176,7 @@ public class MainGUI extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				doSearch(tabbedPane, txtrResult);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				this.mouseReleased(e);
-			}
-			
+			}			
 		});
 		textFieldQueryInput.addKeyListener(new KeyAdapter() {
 			@Override
@@ -235,8 +230,8 @@ public class MainGUI extends JFrame {
 				final JFileChooser jFileChooser = new JFileChooser(lastDir);
 				jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				jFileChooser.setFileFilter(new FileNameExtensionFilter("Index file.", "index"));
-				final int showOpenDialog = jFileChooser.showSaveDialog(contentPane);
-				if(showOpenDialog == JFileChooser.APPROVE_OPTION) {
+				final int showSaveDialog = jFileChooser.showSaveDialog(contentPane);
+				if(showSaveDialog == JFileChooser.APPROVE_OPTION) {
 					final File selectedFile = jFileChooser.getSelectedFile();
 					final IndexSerializer indexSerializer = new IndexSerializer(selectedFile.getAbsolutePath());
 					indexSerializer.saveIndex(index);
@@ -282,10 +277,11 @@ public class MainGUI extends JFrame {
 		for (String docID : docIDs) {
 			fileToParse.add(index.getFilePath(Integer.parseInt(docID)));
 		}
+		final Parser parser = new Parser();
 		for (String file : fileToParse) {
 			try {
-				List<Document> parse = new Parser().parse(new BufferedReader(new FileReader(new File(file))));
-				for (Document document : parse) {
+				List<Document> documents = parser.parse(new BufferedReader(new FileReader(new File(file))));
+				for (Document document : documents) {
 					if(docIDs.contains(document.getNewid())) {
 						result.put(document.getNewid(), document);
 					}
