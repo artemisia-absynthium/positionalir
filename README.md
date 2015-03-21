@@ -6,9 +6,9 @@ Search engine specialized in phrase queries.
 
 Bag-of-words approach extended to terms position into the document.
 
-* Inverted Index with position of words
-* Indexing system
-* Querying system
+* Inverted Index with position of words;
+* Indexing system;
+* Querying system;
 * Simple Java Swing GUI for indexing and searching.
 
 Developed using only Java SE JDK (no libraries used as for requirements).
